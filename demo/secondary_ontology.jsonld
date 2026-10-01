@@ -1,0 +1,153 @@
+{
+  "@context": {
+    "ontology": "http://burroughs.machine/schema/v1#",
+    "PrimaryEntity": "ontology:PrimaryEntity",
+    "SecondaryCriticalEntity": "ontology:SecondaryCriticalEntity",
+    "subverts_or_exposes": "ontology:subverts_or_exposes"
+  },
+  "@graph": [
+    {
+      "@id": "ontology:Primary_System",
+      "@type": "PrimaryEntity",
+      "label": "system",
+      "status": "TargetOfDeconstruction",
+      "critique": "Embodiment of dominant control grammar in text."
+    },
+    {
+      "@id": "ontology:Primary_Central",
+      "@type": "PrimaryEntity",
+      "label": "central",
+      "status": "TargetOfDeconstruction",
+      "critique": "Embodiment of dominant control grammar in text."
+    },
+    {
+      "@id": "ontology:Primary_Authority",
+      "@type": "PrimaryEntity",
+      "label": "authority",
+      "status": "TargetOfDeconstruction",
+      "critique": "Embodiment of dominant control grammar in text."
+    },
+    {
+      "@id": "ontology:Primary_Requires",
+      "@type": "PrimaryEntity",
+      "label": "requires",
+      "status": "TargetOfDeconstruction",
+      "critique": "Embodiment of dominant control grammar in text."
+    },
+    {
+      "@id": "ontology:Primary_Strict",
+      "@type": "PrimaryEntity",
+      "label": "strict",
+      "status": "TargetOfDeconstruction",
+      "critique": "Embodiment of dominant control grammar in text."
+    },
+    {
+      "@id": "ontology:Secondary_Lines",
+      "@type": "SecondaryCriticalEntity",
+      "label": "lines",
+      "status": "LiberatoryCounterConcept",
+      "role": "Interferes with primary ontology repetition."
+    },
+    {
+      "@id": "ontology:Secondary_Cut",
+      "@type": "SecondaryCriticalEntity",
+      "label": "cut",
+      "status": "LiberatoryCounterConcept",
+      "role": "Interferes with primary ontology repetition."
+    },
+    {
+      "@id": "ontology:Secondary_Language",
+      "@type": "SecondaryCriticalEntity",
+      "label": "language",
+      "status": "LiberatoryCounterConcept",
+      "role": "Interferes with primary ontology repetition."
+    },
+    {
+      "@id": "ontology:Secondary_Virus",
+      "@type": "SecondaryCriticalEntity",
+      "label": "virus",
+      "status": "LiberatoryCounterConcept",
+      "role": "Interferes with primary ontology repetition."
+    },
+    {
+      "@id": "ontology:Secondary_Outer",
+      "@type": "SecondaryCriticalEntity",
+      "label": "outer",
+      "status": "LiberatoryCounterConcept",
+      "role": "Interferes with primary ontology repetition."
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "ontology:Central",
+      "predicate": "subverts_or_exposes",
+      "object": "ontology:Language",
+      "context": "Emergent relationship from fold-in juxtaposition."
+    },
+    {
+      "subject": "ontology:Language",
+      "predicate": "subverts_or_exposes",
+      "object": "ontology:Authority",
+      "context": "Emergent relationship from fold-in juxtaposition."
+    },
+    {
+      "subject": "ontology:Authority",
+      "predicate": "subverts_or_exposes",
+      "object": "ontology:Requires",
+      "context": "Emergent relationship from fold-in juxtaposition."
+    },
+    {
+      "subject": "ontology:Requires",
+      "predicate": "subverts_or_exposes",
+      "object": "ontology:Virus",
+      "context": "Emergent relationship from fold-in juxtaposition."
+    },
+    {
+      "subject": "ontology:Virus",
+      "predicate": "subverts_or_exposes",
+      "object": "ontology:Strict",
+      "context": "Emergent relationship from fold-in juxtaposition."
+    },
+    {
+      "subject": "ontology:Strict",
+      "predicate": "subverts_or_exposes",
+      "object": "ontology:Compliance",
+      "context": "Emergent relationship from fold-in juxtaposition."
+    },
+    {
+      "subject": "ontology:Discipline",
+      "predicate": "subverts_or_exposes",
+      "object": "ontology:Space",
+      "context": "Emergent relationship from fold-in juxtaposition."
+    },
+    {
+      "subject": "ontology:Space",
+      "predicate": "subverts_or_exposes",
+      "object": "ontology:Attacking",
+      "context": "Emergent relationship from fold-in juxtaposition."
+    },
+    {
+      "subject": "ontology:Attacking",
+      "predicate": "subverts_or_exposes",
+      "object": "ontology:Across",
+      "context": "Emergent relationship from fold-in juxtaposition."
+    },
+    {
+      "subject": "ontology:Across",
+      "predicate": "subverts_or_exposes",
+      "object": "ontology:All",
+      "context": "Emergent relationship from fold-in juxtaposition."
+    }
+  ],
+  "axioms": [
+    "Axiom 1: Primary control ontologies naturalize their own authority through linear repetition.",
+    "Axiom 2: Cut-up fold-in operations shatter implicit epistemic violence.",
+    "Axiom 3: Liberatory secondary entities disrupt reproductive feedback loops."
+  ],
+  "third_mind_insights": [
+    "Emergent Synthesis: Collision between 'system' and 'lines' exposes the latent power structure within the discourse.",
+    "Juxtaposition Insight: Unsettling alignment of [central] <---> [Language] shatters normative linear causality and reveals implicit ideological assumptions.",
+    "Viral Archaeology: The word-lines of established authority are experiencing destructive feedback and parasitic inversion.",
+    "Epistemic Metanoia: Cluster [cut, efficiency, central] indicates a structural rupture in the primary ontology."
+  ]
+}
