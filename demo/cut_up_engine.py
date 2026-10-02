@@ -1,20 +1,21 @@
 """
-Cut-Up and Fold-In Engine for the Burroughs Machine.
-
-Provides text segmentation, permutation, diagonal slicing, and fold-in operators.
+Enhanced Cut-Up, Multi-Stream Fold-In, and Jump Matrix Engine.
+Supports N-way text interleave, non-linear jump matrices, diagonal slicing,
+and semantic fragment permutation.
 """
 
 import random
 import re
-from typing import List, Tuple
+import math
+from typing import List, Dict, Tuple, Optional
 
 class CutUpEngine:
-    def __init__(self, seed: int = None):
+    def __init__(self, seed: Optional[int] = None):
         if seed is not None:
             random.seed(seed)
 
     def segment_words(self, text: str) -> List[str]:
-        """Decompose text into individual word tokens."""
+        """Decompose text into individual word tokens and punctuation."""
         return re.findall(r'\b\w+\b|[^\w\s]', text)
 
     def segment_phrases(self, text: str, chunk_size: int = 3) -> List[str]:
@@ -32,13 +33,13 @@ class CutUpEngine:
             lines = [s.strip() for s in re.split(r'[.!?]', text) if s.strip()]
         return lines
 
-    def classic_cut_up(self, text: str, num_cuts: int = 4) -> str:
+    def classic_cut_up(self, text: str, grid_size: int = 2) -> str:
         """
-        Classic Burroughs 4-quadrant cut-up technique:
+        4-quadrant or N-grid Burroughs cut-up technique:
         Divides text into a grid and rearranges quadrant blocks.
         """
         lines = self.segment_lines(text)
-        if len(lines) < 2:
+        if len(lines) < grid_size:
             words = text.split()
             mid = len(words) // 2
             q1, q2 = words[:mid], words[mid:]
@@ -50,7 +51,6 @@ class CutUpEngine:
         top_half = lines[:mid_line]
         bottom_half = lines[mid_line:]
 
-        # Split left and right
         q1, q2, q3, q4 = [], [], [], []
         for line in top_half:
             words = line.split()
@@ -63,7 +63,6 @@ class CutUpEngine:
             q3.append(" ".join(words[:m]))
             q4.append(" ".join(words[m:]))
 
-        # Permute quadrants: 4-1-3-2 or random
         quadrants = [q4, q1, q3, q2]
         recombined = []
         max_rows = max(len(q) for q in quadrants)
@@ -75,41 +74,80 @@ class CutUpEngine:
 
     def fold_in(self, text_a: str, text_b: str, step: int = 2) -> str:
         """
-        Fold-in technique:
-        Folds Text A across Text B line-by-line or phrase-by-phrase,
-        creating an interwoven, temporal interference pattern.
+        2-way Fold-in technique:
+        Superimposes two streams phrase-by-phrase.
         """
-        phrases_a = self.segment_phrases(text_a, chunk_size=step)
-        phrases_b = self.segment_phrases(text_b, chunk_size=step)
+        return self.multi_stream_fold_in([text_a, text_b], chunk_size=step)
 
-        folded = []
-        len_a, len_b = len(phrases_a), len(phrases_b)
-        max_len = max(len_a, len_b)
+    def multi_stream_fold_in(self, texts: List[str], chunk_size: int = 2) -> str:
+        """
+        N-way Fold-in technique:
+        Superimposes N arbitrary text streams simultaneously, creating multi-stream
+        temporal interference patterns and narrative bleeding.
+        """
+        if not texts:
+            return ""
+        if len(texts) == 1:
+            return texts[0]
 
+        phrase_streams = [self.segment_phrases(t, chunk_size=chunk_size) for t in texts]
+        max_len = max(len(stream) for stream in phrase_streams)
+
+        interleaved = []
         for i in range(max_len):
-            if i < len_a:
-                folded.append(phrases_a[i])
-            if i < len_b:
-                folded.append(phrases_b[i])
+            for stream in phrase_streams:
+                if i < len(stream):
+                    interleaved.append(stream[i])
 
-        return " ".join(folded)
+        return " ".join(interleaved)
 
-    def diagonal_slice(self, text: str) -> str:
+    def jump_matrix_permutation(self, text: str, jump_step: int = 3) -> str:
         """
-        Reads a grid of text diagonally across lines, disrupting standard left-to-right reading.
+        Non-linear Jump Matrix:
+        Arranges words in an N x M grid and traverses non-linearly using stride steps,
+        simulating temporal jumps, anticipations, and déjà vu.
         """
-        lines = [line.split() for line in self.segment_lines(text)]
-        if not lines:
+        words = text.split()
+        if len(words) < 4:
             return text
 
-        words_diag = []
-        max_cols = max(len(l) for l in lines)
-        num_rows = len(lines)
+        cols = int(math.sqrt(len(words))) or 2
+        grid = [words[i:i + cols] for i in range(0, len(words), cols)]
 
-        for d in range(num_rows + max_cols - 1):
-            for r in range(num_rows):
-                c = d - r
-                if 0 <= c < len(lines[r]):
-                    words_diag.append(lines[r][c])
+        traversed = []
+        rows = len(grid)
+        curr_r, curr_c = 0, 0
 
-        return " ".join(words_diag)
+        visited = set()
+        total_cells = sum(len(r) for r in grid)
+        max_iterations = total_cells * 4
+        iterations = 0
+
+        while len(traversed) < total_cells and iterations < max_iterations:
+            iterations += 1
+            if (curr_r, curr_c) not in visited and curr_r < rows and curr_c < len(grid[curr_r]):
+                traversed.append(grid[curr_r][curr_c])
+                visited.add((curr_r, curr_c))
+
+            curr_r = (curr_r + jump_step) % rows
+            curr_c = (curr_c + 1) % cols
+
+        # Append any unvisited cells deterministically
+        for r in range(rows):
+            for c in range(len(grid[r])):
+                if (r, c) not in visited:
+                    traversed.append(grid[r][c])
+
+        return " ".join(traversed)
+
+    def calculate_semantic_entropy(self, text: str) -> float:
+        """Calculates Shannon entropy over word tokens."""
+        words = re.findall(r'\b\w+\b', text.lower())
+        if not words:
+            return 0.0
+        counts = {}
+        for w in words:
+            counts[w] = counts.get(w, 0) + 1
+        total = len(words)
+        entropy = -sum((cnt / total) * math.log2(cnt / total) for cnt in counts.values())
+        return round(entropy, 4)

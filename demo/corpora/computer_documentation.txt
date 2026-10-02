@@ -1,0 +1,8 @@
+POSIX System Calls and Kernel Memory Architecture.
+Operating system processes execute in user space or kernel space via system call traps.
+Memory management unit (MMU) handles virtual address translation, page table walk, and TLB cache invalidation.
+Inter-process communication relies on message queues, shared memory segments, semaphores, and UNIX domain sockets.
+The scheduler uses completely fair scheduling (CFS) with red-black trees to allocate CPU time slices.
+Kernel panics occur when unrecoverable fatal errors disrupt thread execution or memory invariants.
+Stack frame allocation, heap allocation via brk and sbrk, page fault handlers, and buffer overflows.
+Input output control (ioctl) dispatches device driver routines across block and character devices.

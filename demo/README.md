@@ -1,79 +1,60 @@
-# Burroughs-Complete Machine Demonstration
+# Burroughs-Complete Machine Architecture & Practical Applications
 
-This directory contains a functional demonstration of a **Burroughs-Complete Machine**, an abstract model of computational language processing shifted from algorithmic execution (Turing completeness) to William S. Burroughs's theoretical framework of language, control, and linguistic sabotage.
+This directory contains a complete, functional demonstration of a **Burroughs-Complete Machine**—an abstract computational paradigm centered on William S. Burroughs's theory of language as a control system, cut-up operations, fold-in interference, recursive feedback, and linguistic sabotage.
 
 ---
 
 ## Conceptual Architecture & Mathematical Definition
 
-Where a classical Turing Machine operates on symbol manipulation over an infinite tape via a fixed transition function $\delta$, a Burroughs-Complete Machine operates on representations and the mechanisms of control themselves.
+Where a classical Turing Machine operates on symbol manipulation over an infinite tape via a fixed transition function $\delta$, a Burroughs-Complete Machine operates on representations and the mechanisms of control themselves:
 
-The state transition is expressed as:
-
-$$M_{t+1} = F(M_t, x_t, y_t)$$
+$$M_{t+1} = F(M_t, x_t, y_t, ...)$$
 
 where:
 - $M_t$ represents the machine state, prompt buffer, registers, and memory.
-- $x_t$ is the primary input text (e.g. control texts or primary ontologies).
-- $y_t$ is the secondary/oblique input stream (e.g. counter-narratives or disruptors).
-- $F$ is the dynamic production/control regime, which **the machine can modify itself**.
+- $x_t$ is the primary input text (control texts or primary ontologies).
+- $y_t, \dots$ are secondary/oblique input streams (computer docs, philosophical texts, climate-AI, counter-narratives).
+- $F$ is the dynamic production/control regime, which **the machine mutates itself**.
 
 ---
 
-## The 8 Criteria for Burroughs Completeness
+## System Components
 
-1. **Recording Machine (`BurroughsMachine.record`)**
-   - Preserves utterances, texts, commands, and memory streams in a prompt buffer and external store.
+1. **Core Machine Engine (`demo/burroughs_machine.py`)**
+   - State transition loop, tape buffer, state persistence (`save_state`/`load_state`), and self-simulation guarantee.
 
-2. **Segmentation Machine (`CutUpEngine.segment_*`)**
-   - Decomposes messages into arbitrarily manipulable units (words, n-grams, phrases, lines).
+2. **Cut-Up & Permutation Engine (`demo/cut_up_engine.py`)**
+   - Quadrant cut-up, 2-way and N-way multi-stream fold-in, non-linear jump matrix permutation, and Shannon semantic entropy tracking.
 
-3. **Permutation Machine (`CutUpEngine.classic_cut_up`)**
-   - Recombines units into non-linear configurations, shattering standard linear grammar.
+3. **Control Sabotage Protocol (`demo/control_sabotage.py`)**
+   - Control word density detection, word virus injection, token inversion, and dynamic rule set $F$ mutation.
 
-4. **Temporal Machine (`CutUpEngine.fold_in` / `diagonal_slice`)**
-   - Superimposes texts across different sequence positions, manufacturing jumps, loops, and anticipations.
+4. **Gnosis Layer (`demo/gnosis.py`)**
+   - Hirsch-grade latent meaning extractor, juxtaposition pair analysis, and "Third Mind" emergent insight synthesis.
 
-5. **Playback / Feedback Machine (`BurroughsMachine.feedback_step`)**
-   - Output recirculates as input in a recursive feedback loop until control word lines breakdown.
+5. **Practical Application 1: Autocoder (`demo/autocoder.py`)**
+   - Mutates and synthesizes executable Python code using Burroughs cut-up and fold-in techniques. Validates AST and executes safely.
 
-6. **Attack on Control Grammar (`ControlSabotage.detect_control_density`)**
-   - Detects implicit primary ontologies and authority markers embedded within the text stream.
+6. **Practical Application 2: Secondary Ontology Extender (`demo/ontology_extender.py`)**
+   - Deconstructs primary ontologies and extracts critical secondary ontologies in JSON-LD / RDF format to combat symbolic violence.
 
-7. **Sabotage Protocol (`ControlSabotage.sabotage_text`)**
-   - Injects word viruses, token inversions, and scrambles when control density exceeds thresholds.
+7. **Visualization & Control Dashboard (`demo/visualizer.py`)**
+   - Real-time ASCII terminal dashboard and interactive HTML dashboard generator (`demo/dashboard.html`).
 
-8. **Turning Machine Against Machine (`BurroughsMachine.mutate_rule_function_F`)**
-   - Mutates $F$ itself, destabilizing its own rules and simulating any other Burroughs machine specification (`simulate_other_burroughs_machine`).
-
----
-
-## Directory Structure
-
-- `demo/burroughs_machine.py`: Core Burroughs Machine implementation and transition step logic.
-- `demo/cut_up_engine.py`: Cut-up, fold-in, diagonal slicing, and permutation engine.
-- `demo/control_sabotage.py`: Control word detection, viral injection, and rule set mutation.
-- `demo/main.py`: Interactive demonstration runner.
-- `demo/test_burroughs_machine.py`: Automated test suite for all 8 completeness criteria.
-- `demo/corpora/`: Primary control text (`primary_control.txt`) and counter-narrative text (`counter_narrative.txt`).
+8. **Diverse Corpora (`demo/corpora/`)**
+   - Primary control texts, counter-narratives, computer documentation, philosophical works, and climate-AI texts.
 
 ---
 
-## How to Run the Demonstration
+## How to Run
 
-To run the interactive demonstration:
+To run the full integrated demonstration:
 
 ```bash
 PYTHONPATH=. python3 demo/main.py
 ```
 
 To run the automated unit test suite:
-
-```bash
-PYTHONPATH=. python3 -m unittest discover -s demo -p "test_*.py"
-```
-
-To run the automated test suite with python module test discovery:
 
 ```bash
 python3 -m unittest discover -s demo -p "test_*.py"

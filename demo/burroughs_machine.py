@@ -1,61 +1,53 @@
 """
-Core Burroughs-Complete Machine Architecture.
+Enhanced Core Burroughs-Complete Machine Architecture.
 
-Implements all 8 criteria for Burroughs Completeness:
-1. Recording Machine (Tape / Memory)
-2. Segmentation Machine
-3. Permutation Machine
-4. Temporal Machine (Fold-In / Jumps)
-5. Playback / Feedback Loop
-6. Attack on Control Grammar
-7. Sabotage Protocol
-8. Turning Machine Against Machine & Modifying Rule Set F
-
-Formula: M_{t+1} = F(M_t, x_t, y_t) where F is dynamically mutable by the machine.
+Implements all 8 criteria for Burroughs Completeness with state persistence,
+multi-stream folding, semantic entropy registers, and dynamic F mutation.
 """
 
 import json
 import random
-from typing import Any, Dict, List, Optional, Tuple, Callable
+import os
+from typing import Any, Dict, List, Optional, Tuple
 from demo.cut_up_engine import CutUpEngine
 from demo.control_sabotage import ControlSabotage
 
 class BurroughsMachine:
-    def __init__(self, seed: int = 42):
+    def __init__(self, seed: Optional[int] = 42):
         self.cut_up_engine = CutUpEngine(seed=seed)
         self.sabotage_engine = ControlSabotage()
 
-        # 1. Recording Machine State: Prompt/Tape Buffer & Registers
+        # Tape Buffer & Registers
         self.prompt_buffer: List[str] = []
         self.registers: Dict[str, Any] = {
             "state": "INIT",
             "head_pos": 0,
             "cycle_count": 0,
             "control_density": 0.0,
+            "entropy_bits": 0.0,
             "mutation_level": 0
         }
         self.external_memory: Dict[str, str] = {}
         self.playback_history: List[str] = []
 
-        # Dynamic Rule Set / Transformation Regime F(M_t, x_t, y_t)
+        # Dynamic Transformation Ruleset F(M_t, x_t, y_t, ...)
         self.rule_set: Dict[str, str] = {
-            "CUT_UP": "apply_classic_cut_up",
-            "FOLD_IN": "apply_fold_in",
-            "FEEDBACK": "apply_feedback_loop",
-            "SABOTAGE": "apply_sabotage",
-            "MUTATE_RULES": "apply_rule_mutation"
+            "CUT_UP": "classic_cut_up",
+            "FOLD_IN": "multi_stream_fold_in",
+            "JUMP_MATRIX": "jump_matrix_permutation",
+            "FEEDBACK": "recirculate_playback",
+            "SABOTAGE": "sabotage_control_words",
+            "MUTATE_RULES": "mutate_grammar_rules"
         }
 
-    # Criterion 1: Recording Machine (Record input utterance/data to memory/buffer)
     def record(self, key: str, value: str) -> None:
-        """Preserves utterances, images, texts, sounds, commands into memory/tape."""
+        """Preserves utterances, texts, commands into memory/tape."""
         self.external_memory[key] = value
         self.prompt_buffer.append(f"RECORD[{key}]: {value}")
         self.playback_history.append(value)
 
-    # Criterion 2: Segmentation
     def segment(self, text: str, mode: str = "phrases") -> List[str]:
-        """Decomposes message into arbitrarily manipulable units."""
+        """Decomposes message into manipulable units."""
         if mode == "words":
             return self.cut_up_engine.segment_words(text)
         elif mode == "phrases":
@@ -63,85 +55,89 @@ class BurroughsMachine:
         else:
             return self.cut_up_engine.segment_lines(text)
 
-    # Criterion 3: Permutation
-    def permute(self, text: str) -> str:
-        """Recombines units to shatter linear grammar."""
+    def permute(self, text: str, mode: str = "cut_up") -> str:
+        """Recombines units via cut-up or jump-matrix."""
+        if mode == "jump_matrix":
+            return self.cut_up_engine.jump_matrix_permutation(text)
         return self.cut_up_engine.classic_cut_up(text)
 
-    # Criterion 4: Temporal Machine (Fold-In)
     def fold_in(self, text_a: str, text_b: str) -> str:
-        """Superimposes texts across sequence positions manufacturing jumps and loops."""
+        """2-way fold-in superimposition."""
         return self.cut_up_engine.fold_in(text_a, text_b)
 
-    # Criterion 5: Playback / Feedback Loop
+    def multi_fold_in(self, texts: List[str]) -> str:
+        """N-way multi-stream fold-in superimposition."""
+        return self.cut_up_engine.multi_stream_fold_in(texts)
+
     def feedback_step(self, output_text: str) -> str:
         """
-        Feedback operation: Output becomes input again.
-        Scrambled recordings are fed back into the prompt buffer.
+        Feedback operation: Output recirculates into prompt buffer.
+        Scrambled recordings feed back into the control machine.
         """
         self.playback_history.append(output_text)
-        # Feed previous output back with current buffer
         feedback_input = f"FEEDBACK_RECIRCULATION({output_text})"
         self.prompt_buffer.append(feedback_input)
         return feedback_input
 
-    # Criterion 6 & 7: Attack Control Grammar & Sabotage
     def attack_and_sabotage(self, text: str) -> Tuple[str, bool]:
-        """
-        Monitors for control words/grammar and executes sabotage disruption if detected.
-        """
+        """Monitors control density and sabotages word lines if detected."""
         density = self.sabotage_engine.detect_control_density(text)
-        self.registers["control_density"] = density
+        self.registers["control_density"] = round(density, 4)
         sabotaged_text, was_sabotaged = self.sabotage_engine.sabotage_text(text)
         if was_sabotaged:
             self.registers["state"] = "CONTROL_SABOTAGED"
             self.prompt_buffer.append(f"SABOTAGE_EVENT: {sabotaged_text}")
         return sabotaged_text, was_sabotaged
 
-    # Criterion 8: Turn Machine Against Machine & Modify Rule Function F
     def mutate_rule_function_F(self) -> None:
-        """
-        M_{t+1} = F(M_t, x_t, y_t)
-        Modifies F itself, destabilizing the machine's own control rules.
-        """
+        """Mutates rule function F, destabilizing production constraints."""
         self.registers["mutation_level"] += 1
         level = self.registers["mutation_level"]
         self.rule_set = self.sabotage_engine.mutate_control_grammar_rules(self.rule_set)
         self.prompt_buffer.append(f"MUTATION_LEVEL_{level}: Rule set F mutated!")
 
-    def step(self, input_x: str, secondary_y: Optional[str] = None) -> Dict[str, Any]:
+    def step(self, input_x: str, secondary_y: Optional[str] = None, additional_streams: Optional[List[str]] = None) -> Dict[str, Any]:
         """
-        Executes one full step of the Burroughs transition function.
-        M_{t+1} = F(M_t, x_t, y_t)
+        Executes one transition step of Burroughs Machine:
+        M_{t+1} = F(M_t, x_t, y_t, ...)
         """
         self.registers["cycle_count"] += 1
         current_cycle = self.registers["cycle_count"]
 
-        # Step 1: Record inputs
+        # 1. Record inputs
         self.record(f"cycle_{current_cycle}_input_x", input_x)
+        streams = [input_x]
         if secondary_y:
             self.record(f"cycle_{current_cycle}_input_y", secondary_y)
+            streams.append(secondary_y)
+        if additional_streams:
+            for idx, st in enumerate(additional_streams, start=1):
+                self.record(f"cycle_{current_cycle}_stream_{idx}", st)
+                streams.append(st)
 
-        # Step 2: Temporal Fold-in / Cut-Up
-        if secondary_y:
-            recombined = self.fold_in(input_x, secondary_y)
+        # 2. Recombine / Fold-in / Jump Matrix
+        if len(streams) > 1:
+            recombined = self.multi_fold_in(streams)
         else:
-            recombined = self.permute(input_x)
+            recombined = self.permute(input_x, mode="jump_matrix" if current_cycle % 2 == 0 else "cut_up")
 
-        # Step 3: Attack Control Grammar & Sabotage
+        # 3. Calculate Entropy
+        entropy = self.cut_up_engine.calculate_semantic_entropy(recombined)
+        self.registers["entropy_bits"] = entropy
+
+        # 4. Attack Control Grammar & Sabotage
         sabotaged_output, is_sabotaged = self.attack_and_sabotage(recombined)
 
-        # Step 4: Playback Feedback Loop
+        # 5. Feedback Loop
         feedback_str = self.feedback_step(sabotaged_output)
 
-        # Step 5: Meta-Rule Mutation if control density was high or every 2 cycles
+        # 6. Mutate F if sabotaged or periodic
         if is_sabotaged or current_cycle % 2 == 0:
             self.mutate_rule_function_F()
 
-        # Update Head Position & Registers
         self.registers["head_pos"] = len(self.prompt_buffer) - 1
 
-        result = {
+        return {
             "cycle": current_cycle,
             "registers": self.registers.copy(),
             "raw_recombined": recombined,
@@ -150,17 +146,35 @@ class BurroughsMachine:
             "active_rule_set": self.rule_set.copy(),
             "prompt_buffer_size": len(self.prompt_buffer)
         }
-        return result
+
+    def save_state(self, filepath: str) -> None:
+        """Persists state registers and tape buffer to JSON."""
+        data = {
+            "registers": self.registers,
+            "external_memory": self.external_memory,
+            "playback_history": self.playback_history,
+            "prompt_buffer": self.prompt_buffer,
+            "rule_set": self.rule_set
+        }
+        with open(filepath, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=2)
+
+    def load_state(self, filepath: str) -> None:
+        """Loads machine state from JSON."""
+        if os.path.exists(filepath):
+            with open(filepath, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            self.registers = data.get("registers", self.registers)
+            self.external_memory = data.get("external_memory", self.external_memory)
+            self.playback_history = data.get("playback_history", self.playback_history)
+            self.prompt_buffer = data.get("prompt_buffer", self.prompt_buffer)
+            self.rule_set = data.get("rule_set", self.rule_set)
 
     def simulate_other_burroughs_machine(self, other_description: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """
-        Burroughs-Completeness Simulation Guarantee:
-        Can take the specification/prompt-templates of any other Burroughs Machine
-        and simulate its step-by-step operation.
-        """
+        """Self-simulation guarantee."""
         sim_results = []
         inputs = other_description.get("inputs", [])
         for inp in inputs:
-            step_res = self.step(inp.get("x", ""), inp.get("y", None))
+            step_res = self.step(inp.get("x", ""), inp.get("y", None), inp.get("streams", None))
             sim_results.append(step_res)
         return sim_results
