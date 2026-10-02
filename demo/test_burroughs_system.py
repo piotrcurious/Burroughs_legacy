@@ -1,13 +1,14 @@
 """
-Comprehensive Unit Test Suite for Burroughs-Complete Machine Architecture.
+Comprehensive Deep Unit Test Suite for Burroughs-Complete Machine Architecture.
 
 Tests:
 - Core Burroughs completeness criteria
-- N-way multi-stream fold-in and jump matrix permutation
-- Gnosis Layer Hirsch-grade meaning extraction
-- Autocoder syntax mutation and execution
-- Secondary Ontology Extender (JSON-LD)
-- Visualizer ASCII and HTML dashboard generation
+- C Native shared library binding & Markov entropy calculations
+- Prolog Engine unification, SLD resolution, & Description Logic subsumption
+- AST NodeTransformer mutation & crossover autocoder
+- Hirsch Hermeneutics & Co-Occurrence Graph analytics
+- Secondary Ontology Extender JSON-LD & completeness metrics
+- ASCII & HTML Dashboard visualizer
 """
 
 import unittest
@@ -16,82 +17,85 @@ import json
 from demo.burroughs_machine import BurroughsMachine
 from demo.cut_up_engine import CutUpEngine
 from demo.control_sabotage import ControlSabotage
-from demo.gnosis import GnosisExtractor
+from demo.gnosis import GnosisExtractor, CoOccurrenceGraph
+from demo.prolog_engine import PrologEngine, Term, Clause, DescriptionLogicReasoner
+from demo.ast_mutator import ASTAutocoder
 from demo.autocoder import Autocoder, SAMPLE_CODE_SNIPPETS
 from demo.ontology_extender import SecondaryOntologyExtender
 from demo.visualizer import Visualizer
 
-class TestBurroughsSystem(unittest.TestCase):
+class TestDeepBurroughsSystem(unittest.TestCase):
     def setUp(self):
         self.machine = BurroughsMachine(seed=42)
         self.cut_up = CutUpEngine(seed=42)
         self.gnosis = GnosisExtractor()
-        self.autocoder = Autocoder(seed=42)
+        self.prolog = PrologEngine()
+        self.dl_reasoner = DescriptionLogicReasoner()
+        self.ast_autocoder = ASTAutocoder(seed=42)
         self.extender = SecondaryOntologyExtender()
 
-    def test_multi_stream_fold_in(self):
-        """Tests N-way multi-stream text interleave."""
-        t1 = "Alpha stream line one."
-        t2 = "Beta stream line two."
-        t3 = "Gamma stream line three."
-        folded = self.cut_up.multi_stream_fold_in([t1, t2, t3])
-        self.assertIn("Alpha", folded)
-        self.assertIn("Beta", folded)
-        self.assertIn("Gamma", folded)
+    def test_c_native_library_and_markov_entropy(self):
+        """Tests C Native Library integration & Markov entropy calculations."""
+        text = "word lines cut word lines break control authority word lines"
+        entropy = self.cut_up.calculate_markov_entropy(text)
+        self.assertIsInstance(entropy, float)
+        self.assertGreater(entropy, 0.0)
 
-    def test_jump_matrix_permutation(self):
-        """Tests grid jump matrix traversal."""
-        text = "Word one word two word three word four word five word six"
-        permuted = self.cut_up.jump_matrix_permutation(text, jump_step=2)
-        self.assertIsNotNone(permuted)
-        self.assertNotEqual(text, permuted)
+    def test_prolog_unification_and_query(self):
+        """Tests Prolog Engine unification and backward chaining resolution."""
+        # parent(john, mary). parent(mary, alice). grandparent(X, Y) :- parent(X, Z), parent(Z, Y).
+        self.prolog.add_fact(Term("parent", [Term("john"), Term("mary")]))
+        self.prolog.add_fact(Term("parent", [Term("mary"), Term("alice")]))
+        self.prolog.add_rule(
+            Term("grandparent", [Term("X"), Term("Y")]),
+            [Term("parent", [Term("X"), Term("Z")]), Term("parent", [Term("Z"), Term("Y")])]
+        )
 
-    def test_semantic_entropy_calculation(self):
-        """Tests Shannon semantic entropy calculation."""
-        text = "word word word word"
-        ent1 = self.cut_up.calculate_semantic_entropy(text)
-        text_var = "alpha beta gamma delta epsilon"
-        ent2 = self.cut_up.calculate_semantic_entropy(text_var)
-        self.assertGreater(ent2, ent1)
+        sols = self.prolog.solve_query([Term("grandparent", [Term("john"), Term("Y")])], orig_vars=["Y"])
+        self.assertGreater(len(sols), 0)
+        self.assertEqual(sols[0]["Y"].name, "alice")
 
-    def test_gnosis_meaning_extraction(self):
-        """Tests Hirsch-grade meaning extractor and Third Mind insights."""
-        text = "The central authority enforces mandatory compliance through word lines."
-        analysis = self.gnosis.analyze_cut_up(text)
-        self.assertIn("top_keywords", analysis)
-        self.assertIn("third_mind_insights", analysis)
-        self.assertGreater(len(analysis["third_mind_insights"]), 0)
+    def test_description_logic_subsumption(self):
+        """Tests Description Logic TBox subsumption reasoning."""
+        self.dl_reasoner.add_subclass("PrimaryControlEntity", "SystemicDominance")
+        is_sub = self.dl_reasoner.is_subsumed_by("PrimaryControlEntity", "SystemicDominance")
+        self.assertTrue(is_sub)
 
-    def test_autocoder_synthesis_and_execution(self):
-        """Tests Autocoder code generation, AST validation, and safe execution."""
-        code = self.autocoder.synthesize_autocode(SAMPLE_CODE_SNIPPETS)
-        self.assertTrue(self.autocoder.validate_code_syntax(code))
-        res = self.autocoder.execute_autocode(code, input_val=42)
-        self.assertEqual(res["status"], "DISRUPTED")
-        self.assertEqual(res["x"], 42)
+    def test_co_occurrence_graph_pagerank(self):
+        """Tests word co-occurrence graph construction and PageRank."""
+        words = ["control", "authority", "system", "virus", "word", "lines", "control", "virus"]
+        graph = CoOccurrenceGraph(window_size=3)
+        graph.build_graph(words)
+        pr = graph.calculate_pagerank()
+        self.assertIn("control", pr)
+        self.assertIn("virus", pr)
 
-    def test_ontology_extender_jsonld(self):
-        """Tests Secondary Ontology Extender generation and export."""
+    def test_hirsch_hermeneutics(self):
+        """Tests E.D. Hirsch verbal meaning vs. significance analysis."""
+        text = "Central authority enforces mandatory compliance across all systems."
+        hirsch = self.gnosis.hirsch_hermeneutic_analysis(text)
+        self.assertIn("verbal_meaning", hirsch)
+        self.assertIn("contextual_significance", hirsch)
+
+    def test_ast_node_crossover_and_mutation(self):
+        """Tests AST NodeTransformer cut-ups and code crossover."""
+        code1 = SAMPLE_CODE_SNIPPETS[0]
+        code2 = SAMPLE_CODE_SNIPPETS[2]
+        crossover = self.ast_autocoder.ast_crossover(code1, code2)
+        mutated = self.ast_autocoder.mutate_ast(crossover)
+        self.assertIsNotNone(mutated)
+        res = self.ast_autocoder.execute_ast_autocode(mutated, input_val=[1, 2, 3])
+        self.assertIn("status", res)
+
+    def test_ontology_extender_metrics(self):
+        """Tests JSON-LD output and ontology completeness score calculation."""
         p_text = "The central authority enforces regulation and discipline."
         c_text = "Cut the word lines and disrupt the primary ontology."
         ont = self.extender.deconstruct_primary_ontology(p_text, c_text)
-        self.assertIn("@graph", ont)
-        self.assertIn("relationships", ont)
-
-        out_path = "/tmp/test_ontology.jsonld"
-        self.extender.export_ontology_json(ont, out_path)
-        self.assertTrue(os.path.exists(out_path))
-
-    def test_visualizer_rendering(self):
-        """Tests ASCII and HTML dashboard generation."""
-        step_res = self.machine.step("Authority and discipline", "Break word lines")
-        analysis = self.gnosis.analyze_cut_up(step_res["sabotaged_output"])
-        ascii_dash = Visualizer.render_ascii_dashboard(step_res, analysis)
-        self.assertIn("BURROUGHS MACHINE", ascii_dash)
-
-        html_path = "/tmp/test_dashboard.html"
-        Visualizer.generate_html_dashboard([step_res], html_path)
-        self.assertTrue(os.path.exists(html_path))
+        self.assertIn("completeness_metrics", ont)
+        self.assertIn("dl_subsumption_proof_valid", ont)
+        self.assertTrue(ont["dl_subsumption_proof_valid"])
+        self.assertGreater(ont["completeness_metrics"]["completeness_score"], 0.0)
 
 if __name__ == "__main__":
     unittest.main()

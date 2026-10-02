@@ -1,25 +1,28 @@
 """
-Secondary Ontology Completeness Extender.
+Secondary Ontology Completeness Extender & Description Logic Subsumption Engine.
 
-Deconstructs primary ontologies (which contain implicit power dynamics / symbolic violence)
-and extends them into critical, reflective secondary ontologies (RDF/JSON-LD knowledge graphs).
+Generates complete RDF/OWL/JSON-LD knowledge graphs, executes Description Logic (DL)
+subsumption reasoning via prolog_engine, and computes mathematical Ontology Completeness metrics.
 """
 
 import json
-import re
+import math
 from typing import Dict, List, Any, Set
 from demo.gnosis import GnosisExtractor
 from demo.cut_up_engine import CutUpEngine
+from demo.prolog_engine import DescriptionLogicReasoner
 
 class SecondaryOntologyExtender:
     def __init__(self):
         self.gnosis = GnosisExtractor()
         self.cut_up = CutUpEngine()
+        self.reasoner = DescriptionLogicReasoner()
 
     def deconstruct_primary_ontology(self, primary_text: str, counter_text: str) -> Dict[str, Any]:
         """
         Collides primary text with counter-narrative text to surface hidden entities,
-        redefine existing entities, and discover new subversive relationships.
+        redefine existing entities, discover new subversive relationships,
+        and perform DL subsumption proofs.
         """
         recombined = self.cut_up.fold_in(primary_text, counter_text)
         analysis = self.gnosis.analyze_cut_up(recombined)
@@ -27,53 +30,74 @@ class SecondaryOntologyExtender:
         primary_terms = self.gnosis.extract_keywords(primary_text, top_n=5)
         counter_terms = self.gnosis.extract_keywords(counter_text, top_n=5)
 
-        # Entity Extraction
+        # DL Axiom Setup in Prolog Reasoner
+        self.reasoner.add_subclass("PrimaryControlEntity", "SystemicDominance")
+        self.reasoner.add_subclass("SecondaryCriticalEntity", "LiberatoryCounterConcept")
+
         entities = []
         for term, cnt in primary_terms:
+            ent_id = f"Primary_{term.capitalize()}"
             entities.append({
-                "@id": f"ontology:Primary_{term.capitalize()}",
-                "@type": "PrimaryEntity",
+                "@id": f"ontology:{ent_id}",
+                "@type": "PrimaryControlEntity",
                 "label": term,
                 "status": "TargetOfDeconstruction",
-                "critique": f"Embodiment of dominant control grammar in text."
+                "critique": "Embodiment of dominant control grammar."
             })
+            self.reasoner.add_instance(ent_id, "PrimaryControlEntity")
 
         for term, cnt in counter_terms:
+            ent_id = f"Secondary_{term.capitalize()}"
             entities.append({
-                "@id": f"ontology:Secondary_{term.capitalize()}",
+                "@id": f"ontology:{ent_id}",
                 "@type": "SecondaryCriticalEntity",
                 "label": term,
                 "status": "LiberatoryCounterConcept",
-                "role": f"Interferes with primary ontology repetition."
+                "role": "Interferes with primary ontology repetition."
             })
+            self.reasoner.add_instance(ent_id, "SecondaryCriticalEntity")
 
-        # Relationship Discovery via Juxtaposition Pairs
+        # Verify DL Subsumption: Is PrimaryControlEntity subsumed by SystemicDominance?
+        dl_proof = self.reasoner.is_subsumed_by("PrimaryControlEntity", "SystemicDominance")
+
         relationships = []
         for w1, w2 in analysis["juxtaposition_pairs"]:
             relationships.append({
                 "subject": f"ontology:{w1.capitalize()}",
                 "predicate": "subverts_or_exposes",
                 "object": f"ontology:{w2.capitalize()}",
-                "context": f"Emergent relationship from fold-in juxtaposition."
+                "context": "Emergent relationship from fold-in juxtaposition."
             })
 
-        # Axiom / Rule Formulations
         axioms = [
-            "Axiom 1: Primary control ontologies naturalize their own authority through linear repetition.",
-            "Axiom 2: Cut-up fold-in operations shatter implicit epistemic violence.",
-            "Axiom 3: Liberatory secondary entities disrupt reproductive feedback loops."
+            r"Axiom 1: PrimaryControlEntity \sqsubseteq SystemicDominance",
+            r"Axiom 2: SecondaryCriticalEntity \sqsubseteq LiberatoryCounterConcept",
+            r"Axiom 3: \forall x. SubvertsOrExposes(x) \implies DisruptionOfWordLines(x)"
         ]
+
+        # Calculate Formal Ontology Completeness Metrics
+        num_entities = len(entities)
+        num_rels = len(relationships)
+        num_axioms = len(axioms)
+        completeness_score = round(min(1.0, (num_entities * 0.4 + num_rels * 0.4 + num_axioms * 0.2) / 10.0), 4)
 
         json_ld = {
             "@context": {
-                "ontology": "http://burroughs.machine/schema/v1#",
-                "PrimaryEntity": "ontology:PrimaryEntity",
+                "ontology": "http://burroughs.machine/schema/v2#",
+                "PrimaryControlEntity": "ontology:PrimaryControlEntity",
                 "SecondaryCriticalEntity": "ontology:SecondaryCriticalEntity",
                 "subverts_or_exposes": "ontology:subverts_or_exposes"
             },
             "@graph": entities,
             "relationships": relationships,
-            "axioms": axioms,
+            "dl_axioms": axioms,
+            "dl_subsumption_proof_valid": dl_proof,
+            "completeness_metrics": {
+                "entity_count": num_entities,
+                "relationship_count": num_rels,
+                "dl_axiom_count": num_axioms,
+                "completeness_score": completeness_score
+            },
             "third_mind_insights": analysis["third_mind_insights"]
         }
 
