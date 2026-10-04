@@ -1,12 +1,13 @@
 """
-Comprehensive Demonstration Runner for Burroughs-Complete Machine Architecture.
+Integrated Deep Demonstration Runner for Burroughs-Complete Machine Architecture.
 
-Runs:
-1. Multi-stream Fold-in & Cut-up transitions across 4 diverse corpora.
-2. Gnosis Layer Hirsch-grade meaning extraction and Third Mind synthesis.
-3. Burroughs Autocoder code mutation and execution.
-4. Secondary Ontology Extender generation (JSON-LD).
-5. Visualizer ASCII Dashboard and HTML Dashboard export.
+Demonstrates:
+1. Multi-Stream Fold-in & C Native Markov Entropy / LSA Vector Space.
+2. Hirsch Hermeneutic Gnosis Layer & Word Co-Occurrence Graph Analysis.
+3. Prolog DL Reasoner & Description Logic Subsumption Proofs.
+4. AST Node Crossover & Evolutionary Autocoder.
+5. Secondary Ontology Extender with Mathematical Completeness Metrics (JSON-LD).
+6. ASCII Control Visualizer & HTML Dashboard Export.
 """
 
 import sys
@@ -14,6 +15,8 @@ import os
 import json
 from demo.burroughs_machine import BurroughsMachine
 from demo.gnosis import GnosisExtractor
+from demo.prolog_engine import PrologEngine, Term, DescriptionLogicReasoner
+from demo.ast_mutator import ASTAutocoder
 from demo.autocoder import Autocoder, SAMPLE_CODE_SNIPPETS
 from demo.ontology_extender import SecondaryOntologyExtender
 from demo.visualizer import Visualizer
@@ -26,7 +29,7 @@ def load_file(path: str) -> str:
 
 def main():
     print("=" * 75)
-    print("      BURROUGHS-COMPLETE MACHINE INTEGRATED DEMONSTRATION")
+    print("      BURROUGHS-COMPLETE MACHINE INTEGRATED DEEP DEMONSTRATION")
     print("      'Universality over transformations of the control system itself'")
     print("=" * 75)
 
@@ -41,8 +44,8 @@ def main():
     gnosis = GnosisExtractor()
     history = []
 
-    # 2. Step 1: Multi-Stream Fold-In (4 streams)
-    print("\n>>> EXECUTE CYCLE 1: 4-STREAM MULTI-FOLD-IN")
+    # 2. Cycle 1: 4-Stream Multi-Fold-In & C Native Markov Entropy Calculation
+    print("\n>>> EXECUTE CYCLE 1: 4-STREAM MULTI-FOLD-IN & C NATIVE MARKOV ENTROPY")
     step1 = machine.step(
         input_x=text_control,
         secondary_y=text_counter,
@@ -52,7 +55,7 @@ def main():
     print(Visualizer.render_ascii_dashboard(step1, gnosis1))
     history.append(step1)
 
-    # 3. Step 2: Jump Matrix Permutation & Recirculation
+    # 3. Cycle 2: Recirculation & Jump Matrix Permutation
     print("\n>>> EXECUTE CYCLE 2: RECIRCULATION & JUMP MATRIX PERMUTATION")
     step2 = machine.step(
         input_x=step1["sabotaged_output"],
@@ -62,30 +65,43 @@ def main():
     print(Visualizer.render_ascii_dashboard(step2, gnosis2))
     history.append(step2)
 
-    # 4. Gnosis Meaning Extraction Output
+    # 4. Hirsch Hermeneutics & Co-Occurrence Graph Analysis
     print("\n" + "=" * 75)
-    print("GNOSIS LAYER: HIRSCH-GRADE MEANING EXTRACTION & THIRD MIND SYNTHESIS")
+    print("GNOSIS LAYER: HIRSCH HERMENEUTICS & CO-OCCURRENCE GRAPH ANALYSIS")
     print("=" * 75)
-    for idx, insight in enumerate(gnosis2["third_mind_insights"], start=1):
-        print(f"[{idx}] {insight}")
+    hirsch = gnosis2["hirsch_hermeneutics"]
+    print(f"[Verbal Meaning]: {hirsch['verbal_meaning']}")
+    print(f"[Contextual Significance]: {hirsch['contextual_significance']}")
+    print(f"[Graph Central Hubs]: {', '.join(hirsch['top_graph_hubs'])}")
 
-    # 5. Autocoder Practical Application
+    # 5. Prolog Engine & Description Logic Subsumption Proof
     print("\n" + "=" * 75)
-    print("PRACTICAL APPLICATION 1: BURROUGHS AUTOCODER")
+    print("PROLOG LOGIC ENGINE: DESCRIPTION LOGIC (DL) SUBSUMPTION PROOF")
     print("=" * 75)
-    autocoder = Autocoder(seed=42)
-    generated_code = autocoder.synthesize_autocode(SAMPLE_CODE_SNIPPETS)
-    print("Generated Autocode:")
-    print("-" * 50)
-    print(generated_code)
-    print("-" * 50)
-    is_valid = autocoder.validate_code_syntax(generated_code)
-    print(f"AST Syntax Valid: {is_valid}")
-    if is_valid:
-        exec_res = autocoder.execute_autocode(generated_code, input_val=100)
-        print(f"Autocode Execution Result: {exec_res}")
+    dl = DescriptionLogicReasoner()
+    dl.add_subclass("PrimaryControlEntity", "SystemicDominance")
+    dl.add_instance("AuthorityProtocol", "PrimaryControlEntity")
+    is_subsumed = dl.is_subsumed_by("PrimaryControlEntity", "SystemicDominance")
+    print(f"Proof Goal: PrimaryControlEntity ⊑ SystemicDominance")
+    print(f"SLD Resolution Proof Result: {is_subsumed}")
 
-    # 6. Secondary Ontology Completeness Extender
+    # 6. AST Evolutionary Autocoder
+    print("\n" + "=" * 75)
+    print("PRACTICAL APPLICATION 1: AST EVOLUTIONARY AUTOCODER")
+    print("=" * 75)
+    ast_autocoder = ASTAutocoder(seed=42)
+    parent1 = SAMPLE_CODE_SNIPPETS[0]
+    parent2 = SAMPLE_CODE_SNIPPETS[2]
+    crossover_code = ast_autocoder.ast_crossover(parent1, parent2)
+    mutated_ast_code = ast_autocoder.mutate_ast(crossover_code)
+    print("Mutated AST Code:")
+    print("-" * 50)
+    print(mutated_ast_code)
+    print("-" * 50)
+    exec_res = ast_autocoder.execute_ast_autocode(mutated_ast_code, input_val=[1, 2, 3])
+    print(f"AST Autocode Execution Result: {exec_res}")
+
+    # 7. Secondary Ontology Completeness Extender
     print("\n" + "=" * 75)
     print("PRACTICAL APPLICATION 2: SECONDARY ONTOLOGY EXTENDER (JSON-LD)")
     print("=" * 75)
@@ -94,10 +110,9 @@ def main():
     ontology_path = "demo/secondary_ontology.jsonld"
     extender.export_ontology_json(ontology_json, ontology_path)
     print(f"Exported Secondary Ontology to: {ontology_path}")
-    print(f"Graph Entities Count: {len(ontology_json['@graph'])}")
-    print(f"Discovered Relationships Count: {len(ontology_json['relationships'])}")
+    print(f"Completeness Metrics: {ontology_json['completeness_metrics']}")
 
-    # 7. HTML Dashboard Generation
+    # 8. HTML Control Dashboard Generation
     Visualizer.generate_html_dashboard(history, "demo/dashboard.html")
     print(f"\nExported HTML Control Dashboard to: demo/dashboard.html")
 

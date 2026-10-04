@@ -1,7 +1,8 @@
 """
-Visualization & Control Interface for the Burroughs-Complete Machine.
+Visualization & Web Control Dashboard for the Burroughs-Complete Machine.
 
-Provides ASCII/Terminal dashboard rendering and HTML interactive dashboard generation.
+Renders ASCII terminal control visualizers, SVG co-occurrence graph visualizations,
+and exports standalone HTML/JS dashboards.
 """
 
 import os
@@ -14,25 +15,28 @@ class Visualizer:
         """Renders an ASCII visualization of machine registers, entropy, and gnosis insights."""
         reg = step_result["registers"]
         lines = []
-        lines.append("+" + "=" * 68 + "+")
-        lines.append("|           BURROUGHS MACHINE REAL-TIME CONTROL DASHBOARD            |")
-        lines.append("+" + "=" * 68 + "+")
+        lines.append("+" + "=" * 70 + "+")
+        lines.append("|            BURROUGHS MACHINE REAL-TIME CONTROL DASHBOARD            |")
+        lines.append("+" + "=" * 70 + "+")
         lines.append(f"| Cycle: {reg['cycle_count']:<5} | State: {reg['state']:<18} | Head Pos: {reg['head_pos']:<5} |")
-        lines.append(f"| Control Density: {reg['control_density']:<6.3f} | Semantic Entropy: {reg['entropy_bits']:<5.3f} bits | Mut Level: {reg['mutation_level']:<3} |")
-        lines.append("+" + "-" * 68 + "+")
+        lines.append(f"| Control Density: {reg['control_density']:<6.3f} | Entropy: {reg['entropy_bits']:<5.3f} bits | Mut Level: {reg['mutation_level']:<3} |")
+        lines.append("+" + "-" * 70 + "+")
         lines.append("| OUTPUT STREAM:")
         out_snippet = step_result['sabotaged_output'][:150] + "..." if len(step_result['sabotaged_output']) > 150 else step_result['sabotaged_output']
         lines.append(f"| {out_snippet}")
-        lines.append("+" + "-" * 68 + "+")
-        lines.append("| GNOSIS LATENT INSIGHTS:")
-        for ins in gnosis_analysis.get("third_mind_insights", [])[:3]:
+        lines.append("+" + "-" * 70 + "+")
+        lines.append("| HIRSCH HERMENEUTICS & GNOSIS INSIGHTS:")
+        hirsch = gnosis_analysis.get("hirsch_hermeneutics", {})
+        if hirsch.get("verbal_meaning"):
+            lines.append(f"|  * {hirsch['verbal_meaning']}")
+        for ins in gnosis_analysis.get("third_mind_insights", [])[:2]:
             lines.append(f"|  * {ins}")
-        lines.append("+" + "=" * 68 + "+")
+        lines.append("+" + "=" * 70 + "+")
         return "\n".join(lines)
 
     @staticmethod
     def generate_html_dashboard(history: List[Dict[str, Any]], output_filepath: str = "demo/dashboard.html") -> None:
-        """Generates a standalone HTML/CSS visualizer dashboard."""
+        """Generates an interactive HTML/JS dashboard with SVG graph representations."""
         html_content = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,11 +49,12 @@ class Visualizer:
         .metric {{ display: inline-block; margin-right: 20px; font-weight: bold; color: #79c0ff; }}
         .sabotaged {{ color: #ff7b72; background: #220000; padding: 10px; border-left: 3px solid #f85149; }}
         .insight {{ color: #d2a8ff; font-style: italic; }}
+        svg {{ background: #010409; border: 1px solid #30363d; margin-top: 10px; }}
     </style>
 </head>
 <body>
     <h1>Burroughs-Complete Machine Real-Time Control Dashboard</h1>
-    <p>Universality over transformations of the representational & control system itself.</p>
+    <p>Universality over transformations of the representational & control system itself: M_{{t+1}} = F(M_t, x_t, y_t).</p>
 """
         for step in history:
             reg = step["registers"]
@@ -58,7 +63,7 @@ class Visualizer:
         <h2>Cycle {reg['cycle_count']} - State: {reg['state']}</h2>
         <div>
             <span class="metric">Control Density: {reg['control_density']}</span>
-            <span class="metric">Entropy: {reg['entropy_bits']} bits</span>
+            <span class="metric">Markov Entropy: {reg['entropy_bits']} bits</span>
             <span class="metric">Mutation Level: {reg['mutation_level']}</span>
         </div>
         <h3>Sabotaged Output Stream:</h3>

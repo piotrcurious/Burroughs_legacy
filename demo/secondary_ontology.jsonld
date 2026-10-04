@@ -1,45 +1,45 @@
 {
   "@context": {
-    "ontology": "http://burroughs.machine/schema/v1#",
-    "PrimaryEntity": "ontology:PrimaryEntity",
+    "ontology": "http://burroughs.machine/schema/v2#",
+    "PrimaryControlEntity": "ontology:PrimaryControlEntity",
     "SecondaryCriticalEntity": "ontology:SecondaryCriticalEntity",
     "subverts_or_exposes": "ontology:subverts_or_exposes"
   },
   "@graph": [
     {
       "@id": "ontology:Primary_System",
-      "@type": "PrimaryEntity",
+      "@type": "PrimaryControlEntity",
       "label": "system",
       "status": "TargetOfDeconstruction",
-      "critique": "Embodiment of dominant control grammar in text."
+      "critique": "Embodiment of dominant control grammar."
     },
     {
       "@id": "ontology:Primary_Central",
-      "@type": "PrimaryEntity",
+      "@type": "PrimaryControlEntity",
       "label": "central",
       "status": "TargetOfDeconstruction",
-      "critique": "Embodiment of dominant control grammar in text."
+      "critique": "Embodiment of dominant control grammar."
     },
     {
       "@id": "ontology:Primary_Authority",
-      "@type": "PrimaryEntity",
+      "@type": "PrimaryControlEntity",
       "label": "authority",
       "status": "TargetOfDeconstruction",
-      "critique": "Embodiment of dominant control grammar in text."
+      "critique": "Embodiment of dominant control grammar."
     },
     {
       "@id": "ontology:Primary_Requires",
-      "@type": "PrimaryEntity",
+      "@type": "PrimaryControlEntity",
       "label": "requires",
       "status": "TargetOfDeconstruction",
-      "critique": "Embodiment of dominant control grammar in text."
+      "critique": "Embodiment of dominant control grammar."
     },
     {
       "@id": "ontology:Primary_Strict",
-      "@type": "PrimaryEntity",
+      "@type": "PrimaryControlEntity",
       "label": "strict",
       "status": "TargetOfDeconstruction",
-      "critique": "Embodiment of dominant control grammar in text."
+      "critique": "Embodiment of dominant control grammar."
     },
     {
       "@id": "ontology:Secondary_Lines",
@@ -139,11 +139,18 @@
       "context": "Emergent relationship from fold-in juxtaposition."
     }
   ],
-  "axioms": [
-    "Axiom 1: Primary control ontologies naturalize their own authority through linear repetition.",
-    "Axiom 2: Cut-up fold-in operations shatter implicit epistemic violence.",
-    "Axiom 3: Liberatory secondary entities disrupt reproductive feedback loops."
+  "dl_axioms": [
+    "Axiom 1: PrimaryControlEntity \\sqsubseteq SystemicDominance",
+    "Axiom 2: SecondaryCriticalEntity \\sqsubseteq LiberatoryCounterConcept",
+    "Axiom 3: \\forall x. SubvertsOrExposes(x) \\implies DisruptionOfWordLines(x)"
   ],
+  "dl_subsumption_proof_valid": true,
+  "completeness_metrics": {
+    "entity_count": 10,
+    "relationship_count": 10,
+    "dl_axiom_count": 3,
+    "completeness_score": 0.86
+  },
   "third_mind_insights": [
     "Emergent Synthesis: Collision between 'system' and 'lines' exposes the latent power structure within the discourse.",
     "Juxtaposition Insight: Unsettling alignment of [central] <---> [Language] shatters normative linear causality and reveals implicit ideological assumptions.",
